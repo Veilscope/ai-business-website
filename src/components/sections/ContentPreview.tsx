@@ -2,9 +2,11 @@ import Link from "next/link";
 
 import { Button } from "@/components/ui/Button";
 import { SectionHeader } from "@/components/ui/SectionHeader";
-import { articles } from "@/content/articles";
+import { getArticles } from "@/sanity/lib/articles";
 
-export function ContentPreview() {
+export async function ContentPreview() {
+  const articles = await getArticles();
+
   return (
     <section className="bg-slate-50 py-18 sm:py-24">
       <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
@@ -25,7 +27,8 @@ export function ContentPreview() {
               key={article.slug}
             >
               <p className="text-sm font-semibold text-blue-700">
-                {article.category} · {article.readTime}
+                {article.category?.title || "Insight"} ·{" "}
+                {article.readTime || "4 min read"}
               </p>
               <h3 className="mt-3 text-xl font-semibold leading-7 text-slate-950">
                 <Link href={`/insights/${article.slug}`}>

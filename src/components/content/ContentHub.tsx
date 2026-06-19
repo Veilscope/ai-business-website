@@ -3,26 +3,37 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 
-import type { Article } from "@/content/articles";
-import { articleCategories } from "@/content/articles";
+import { ArticleCard } from "@/components/content/ArticleCard";
 import { cn } from "@/lib/utils";
+import type { ArticleCategory, ArticleListItem } from "@/sanity/lib/types";
 
 type ContentHubProps = {
-  articles: Article[];
+  articles: ArticleListItem[];
+  categories: ArticleCategory[];
+  featuredArticle?: ArticleListItem | null;
 };
 
-export function ContentHub({ articles }: ContentHubProps) {
+export function ContentHub({
+  articles,
+  categories,
+  featuredArticle,
+}: ContentHubProps) {
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("All");
+  const categoryOptions = [
+    { title: "All", slug: "All" },
+    ...categories.map((item) => ({ title: item.title, slug: item.slug })),
+  ];
 
   const filtered = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
 
     return articles.filter((article) => {
-      const matchesCategory = category === "All" || article.category === category;
+      const matchesCategory =
+        category === "All" || article.category?.slug === category;
       const matchesQuery =
         !normalizedQuery ||
-        `${article.title} ${article.excerpt} ${article.category}`
+        `${article.title} ${article.excerpt} ${article.category?.title || ""}`
           .toLowerCase()
           .includes(normalizedQuery);
 
@@ -32,6 +43,38 @@ export function ContentHub({ articles }: ContentHubProps) {
 
   return (
     <div>
+      {featuredArticle ? (
+        <article className="motion-surface mb-8 grid overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm shadow-slate-950/5 lg:grid-cols-[0.85fr_1.15fr]">
+          <div className="bg-slate-950 p-6 text-white sm:p-8">
+            <p className="text-sm font-semibold text-cyan-200">Featured</p>
+            <h2 className="mt-4 text-3xl font-semibold tracking-normal">
+              <Link href={`/insights/${featuredArticle.slug}`}>
+                {featuredArticle.title}
+              </Link>
+            </h2>
+            <p className="mt-4 text-base leading-7 text-slate-300">
+              {featuredArticle.excerpt}
+            </p>
+            <Link
+              className="mt-6 inline-flex text-sm font-semibold text-cyan-200 hover:text-white"
+              href={`/insights/${featuredArticle.slug}`}
+            >
+              Read featured article <span aria-hidden="true" className="ml-1">-&gt;</span>
+            </Link>
+          </div>
+          <div className="grid content-center gap-4 bg-white p-6 sm:p-8">
+            <p className="text-sm font-semibold text-blue-700">
+              {featuredArticle.category?.title || "Insight"} ·{" "}
+              {featuredArticle.readTime || "4 min read"}
+            </p>
+            <p className="text-sm leading-6 text-slate-600">
+              Latest thinking from the content library, pulled from the CMS and
+              ready to update without a deployment.
+            </p>
+          </div>
+        </article>
+      ) : null}
+
       <div className="motion-surface rounded-lg border border-slate-200 bg-white p-4 shadow-sm shadow-slate-950/5">
         <label className="text-sm font-semibold text-slate-900" htmlFor="search">
           Search insights
@@ -45,46 +88,38 @@ export function ContentHub({ articles }: ContentHubProps) {
           value={query}
         />
         <div className="mt-4 flex flex-wrap gap-2" role="list">
-          {articleCategories.map((item) => (
+          {categoryOptions.map((item) => (
             <button
               className={cn(
                 "rounded-md border px-3 py-2 text-sm font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600",
-                item === category
+                item.slug === category
                   ? "border-blue-600 bg-blue-600 text-white"
                   : "border-slate-300 bg-white text-slate-700 hover:bg-slate-50",
               )}
-              key={item}
-              onClick={() => setCategory(item)}
+              key={item.slug}
+              onClick={() => setCategory(item.slug)}
               type="button"
             >
-              {item}
+              {item.title}
             </button>
+          ))}
+        </div>
+        <div className="mt-4 flex flex-wrap gap-3 text-sm text-slate-600">
+          {categories.map((item) => (
+            <Link
+              className="font-semibold text-blue-700 hover:text-blue-900"
+              href={`/insights/category/${item.slug}`}
+              key={item.slug}
+            >
+              {item.title} archive
+            </Link>
           ))}
         </div>
       </div>
 
       <div className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
         {filtered.map((article) => (
-          <article
-            className="motion-surface flex h-full flex-col rounded-lg border border-slate-200 bg-white p-6 shadow-sm shadow-slate-950/5"
-            key={article.slug}
-          >
-            <p className="text-sm font-semibold text-blue-700">
-              {article.category} · {article.readTime}
-            </p>
-            <h2 className="mt-3 text-xl font-semibold leading-7 text-slate-950">
-              <Link href={`/insights/${article.slug}`}>{article.title}</Link>
-            </h2>
-            <p className="mt-4 flex-1 text-sm leading-6 text-slate-600">
-              {article.excerpt}
-            </p>
-            <Link
-              className="mt-6 text-sm font-semibold text-blue-700 hover:text-blue-900"
-              href={`/insights/${article.slug}`}
-            >
-              Read article <span aria-hidden="true">-&gt;</span>
-            </Link>
-          </article>
+          <ArticleCard article={article} key={article.slug} />
         ))}
       </div>
 

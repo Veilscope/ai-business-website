@@ -1,16 +1,22 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { ArticleBody } from "@/components/content/ArticleBody";
+import { ArticleCard } from "@/components/content/ArticleCard";
 import { CTASection } from "@/components/sections/CTASection";
 import { brand } from "@/config/brand";
-import { getArticleBySlug, articles } from "@/content/articles";
+import { getArticleBySlug, getArticleSlugs } from "@/sanity/lib/articles";
+import { urlForImage } from "@/sanity/lib/image";
 
 type ArticlePageProps = {
   params: Promise<{ slug: string }>;
 };
 
-export function generateStaticParams() {
+export async function generateStaticParams() {
+  const articles = await getArticleSlugs();
+
   return articles.map((article) => ({
     slug: article.slug,
   }));
@@ -20,7 +26,7 @@ export async function generateMetadata({
   params,
 }: ArticlePageProps): Promise<Metadata> {
   const { slug } = await params;
-  const article = getArticleBySlug(slug);
+  const article = await getArticleBySlug(slug);
 
   if (!article) {
     return {
@@ -29,11 +35,12 @@ export async function generateMetadata({
   }
 
   return {
-    title: article.title,
-    description: article.excerpt,
+    title: article.seoTitle || article.title,
+    description: article.seoDescription || article.excerpt,
+    robots: article.noIndex ? { index: false, follow: false } : undefined,
     openGraph: {
-      title: article.title,
-      description: article.excerpt,
+      title: article.seoTitle || article.title,
+      description: article.seoDescription || article.excerpt,
       type: "article",
     },
   };
@@ -41,9 +48,12 @@ export async function generateMetadata({
 
 export default async function ArticlePage({ params }: ArticlePageProps) {
   const { slug } = await params;
-  const article = getArticleBySlug(slug);
+  const article = await getArticleBySlug(slug);
 
   if (!article) notFound();
+  const imageUrl = article.featuredImage?.asset?._ref
+    ? urlForImage(article.featuredImage).width(1400).height(780).fit("crop").url()
+    : null;
 
   return (
     <>
@@ -57,7 +67,8 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
               &lt;- Back to insights
             </Link>
             <p className="mt-8 text-sm font-semibold text-cyan-200">
-              {article.category} · {article.readTime}
+              {article.category?.title || "Insight"} ·{" "}
+              {article.readTime || "4 min read"}
             </p>
             <h1 className="mt-4 text-4xl font-semibold tracking-normal sm:text-5xl">
               {article.title}
@@ -66,25 +77,32 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
               {article.excerpt}
             </p>
             <p className="mt-6 text-sm text-slate-300">
-              {article.date} · {article.author}
+              {article.publishedAt
+                ? new Intl.DateTimeFormat("en", {
+                    dateStyle: "medium",
+                  }).format(new Date(article.publishedAt))
+                : "Draft date"}{" "}
+              · {article.author?.name || "Denver AI Enablement"}
             </p>
           </div>
         </header>
 
         <div className="bg-white py-16 sm:py-20">
           <div className="mx-auto max-w-3xl space-y-10 px-5 sm:px-6 lg:px-8">
-            {article.body.map((section) => (
-              <section key={section.heading}>
-                <h2 className="text-2xl font-semibold text-slate-950">
-                  {section.heading}
-                </h2>
-                <div className="mt-4 space-y-5 text-base leading-8 text-slate-700">
-                  {section.paragraphs.map((paragraph) => (
-                    <p key={paragraph}>{paragraph}</p>
-                  ))}
-                </div>
-              </section>
-            ))}
+            {imageUrl ? (
+              <div className="relative aspect-[16/9] overflow-hidden rounded-lg bg-slate-100">
+                <Image
+                  alt={article.featuredImage?.alt || ""}
+                  className="object-cover"
+                  fill
+                  priority
+                  sizes="(min-width: 768px) 768px, 100vw"
+                  src={imageUrl}
+                />
+              </div>
+            ) : null}
+
+            <ArticleBody value={article.body} />
 
             <div className="motion-surface rounded-lg border border-blue-100 bg-blue-50 p-6">
               <h2 className="text-xl font-semibold text-slate-950">
@@ -98,6 +116,20 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           </div>
         </div>
       </article>
+      {article.relatedArticles?.length ? (
+        <section className="bg-slate-50 py-18 sm:py-24">
+          <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
+            <h2 className="text-3xl font-semibold tracking-normal text-slate-950">
+              Related insights
+            </h2>
+            <div className="mt-8 grid gap-5 md:grid-cols-3">
+              {article.relatedArticles.map((related) => (
+                <ArticleCard article={related} key={related.slug} />
+              ))}
+            </div>
+          </div>
+        </section>
+      ) : null}
       <CTASection
         copy="Talk through where your team is today, what you have already tried, and what a practical training path could look like."
         headline="Need a practical starting point?"
