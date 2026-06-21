@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 
 import { PageHeader } from "@/components/ui/PageHeader";
+import { brand } from "@/config/brand";
 import { legalPages } from "@/content/pages";
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
-  description: "Privacy policy placeholder for Denver AI Enablement.",
+  description: `Privacy policy placeholder for ${brand.name}.`,
 };
 
 export default function PrivacyPage() {

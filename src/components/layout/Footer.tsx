@@ -5,6 +5,8 @@ import { site } from "@/config/site";
 import { services } from "@/content/services";
 
 export function Footer() {
+  const textNumber: string = brand.contact.textNumber;
+
   return (
     <footer className="border-t border-slate-200 bg-slate-950 text-white">
       <div className="mx-auto grid max-w-7xl gap-10 px-5 py-14 sm:px-6 md:grid-cols-[1.4fr_1fr_1fr_1fr] lg:px-8">
@@ -64,14 +66,16 @@ export function Footer() {
                 {brand.contact.email}
               </a>
             </li>
-            <li>
-              <a
-                className="hover:text-white"
-                href={`sms:${brand.contact.textNumber.replace(/\D/g, "")}`}
-              >
-                Text: {brand.contact.textNumber}
-              </a>
-            </li>
+            {textNumber ? (
+              <li>
+                <a
+                  className="hover:text-white"
+                  href={`sms:${textNumber.replace(/\D/g, "")}`}
+                >
+                  Text: {textNumber}
+                </a>
+              </li>
+            ) : null}
             <li>{brand.market.region} support</li>
           </ul>
         </div>

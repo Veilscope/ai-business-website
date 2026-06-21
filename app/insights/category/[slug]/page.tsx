@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { ArticleCard } from "@/components/content/ArticleCard";
 import { CTASection } from "@/components/sections/CTASection";
 import { PageHeader } from "@/components/ui/PageHeader";
+import { brand } from "@/config/brand";
 import {
   getArticlesByCategory,
   getCategories,
@@ -39,7 +40,7 @@ export async function generateMetadata({
     description:
       category.seoDescription ||
       category.description ||
-      `Articles about ${category.title} from Denver AI Enablement.`,
+      `Articles about ${category.title} from ${brand.name}.`,
   };
 }
 

@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 
 import { PageHeader } from "@/components/ui/PageHeader";
+import { brand } from "@/config/brand";
 import { legalPages } from "@/content/pages";
 
 export const metadata: Metadata = {
   title: "Terms",
-  description: "Terms placeholder for Denver AI Enablement.",
+  description: `Terms placeholder for ${brand.name}.`,
 };
 
 export default function TermsPage() {

@@ -83,7 +83,7 @@ export const services: Service[] = [
   {
     slug: "productivity-systems",
     title: "AI Productivity Systems",
-    category: "Enablement",
+    category: "Adoption",
     summary:
       "Help your team turn AI training into repeatable workflows for sales, marketing, operations, admin, or customer support.",
     description:
@@ -92,7 +92,7 @@ export const services: Service[] = [
       "Reusable prompt libraries",
       "Team workflow templates",
       "SOP support",
-      "Internal enablement resources",
+      "Internal adoption resources",
       "Follow-up support",
     ],
     bestFor: [
@@ -104,7 +104,7 @@ export const services: Service[] = [
       "Workflow template design",
       "Prompt library structure",
       "Documentation and SOP support",
-      "Team enablement resources",
+      "Team adoption resources",
       "Adoption feedback loop",
     ],
     outcomes: [

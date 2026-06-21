@@ -186,10 +186,14 @@ export const contactPage = {
       label: "Email",
       value: brand.contact.email,
     },
-    {
-      label: "Text",
-      value: brand.contact.textNumber,
-    },
+    ...(brand.contact.textNumber
+      ? [
+          {
+            label: "Text",
+            value: brand.contact.textNumber,
+          },
+        ]
+      : []),
     {
       label: "Service area",
       value: `${brand.market.city}, ${brand.market.region}, and remote Colorado teams`,

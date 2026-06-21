@@ -1,6 +1,6 @@
 export const brand = {
-  name: "Denver AI Enablement",
-  logoText: "Denver AI Enablement",
+  name: "AI Training Denver",
+  logoText: "AI Training Denver",
   tagline: "Practical AI training for business adoption.",
   market: {
     city: "Denver",
@@ -8,8 +8,8 @@ export const brand = {
     state: "Colorado",
   },
   contact: {
-    email: "hello@denveraienablement.com",
-    textNumber: "(303) 555-0147",
+    email: "brody@aitrainingdenver.com",
+    textNumber: "",
   },
   socialLinks: {
     linkedin: "https://www.linkedin.com/company/your-placeholder",
@@ -28,9 +28,9 @@ export const brand = {
     "Executive briefings",
   ],
   seo: {
-    siteUrl: "https://www.example.com",
-    titleTemplate: "%s | Denver AI Enablement",
-    defaultTitle: "AI Training for Denver Businesses | Practical Team Workshops",
+    siteUrl: "https://aitrainingdenver.com",
+    titleTemplate: "%s | AI Training Denver",
+    defaultTitle: "AI Training Denver | Practical Team Workshops",
     defaultDescription:
       "Practical AI training for Denver businesses. Help your team use AI confidently, safely, and productively with hands-on workshops and workflow-focused support.",
     keywords: [

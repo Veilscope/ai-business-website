@@ -20,7 +20,7 @@ export const site = {
     "Practical AI training and workflow-focused support for teams across the Denver metro area.",
   metadata: {
     home: {
-      title: "AI Training for Denver Businesses | Practical Team Workshops",
+      title: "AI Training Denver | Practical Team Workshops",
       description:
         "Practical AI training for Denver businesses. Help your team use AI confidently, safely, and productively with hands-on workshops and workflow-focused support.",
     },
@@ -32,7 +32,7 @@ export const site = {
     about: {
       title: "About",
       description:
-        "Learn how Denver AI Enablement helps local teams move from AI curiosity to confident, practical adoption.",
+        "Learn how AI Training Denver helps local teams move from AI curiosity to confident, practical adoption.",
     },
     insights: {
       title: "AI Training Insights for Denver Businesses",

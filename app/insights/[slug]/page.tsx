@@ -82,7 +82,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                     dateStyle: "medium",
                   }).format(new Date(article.publishedAt))
                 : "Draft date"}{" "}
-              · {article.author?.name || "Denver AI Enablement"}
+              · {article.author?.name || brand.name}
             </p>
           </div>
         </header>

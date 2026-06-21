@@ -38,8 +38,8 @@ export default function ContactPage() {
                 Communication preference
               </h3>
               <p className="mt-2 text-sm leading-6 text-slate-700">
-                Email is the primary contact path. Text is available as a
-                secondary option when a quick follow-up is useful.
+                Email is the primary contact path. If you prefer text, include
+                a mobile number in your request.
               </p>
             </div>
           </aside>
@@ -49,8 +49,8 @@ export default function ContactPage() {
               Tell us about your team
             </h2>
             <p className="mt-3 text-sm leading-6 text-slate-600">
-              The form is structured for a future API route, CRM, email service,
-              Airtable, Google Sheet, Zapier webhook, or similar workflow.
+              Share a few details and the message will be sent directly to AI
+              Training Denver.
             </p>
             <div className="mt-8">
               <ContactForm />
