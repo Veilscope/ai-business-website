@@ -4,13 +4,14 @@ import { ContentHub } from "@/components/content/ContentHub";
 import { CTASection } from "@/components/sections/CTASection";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { site } from "@/config/site";
+import { createSeoMetadata } from "@/lib/seo";
 import {
   getArticles,
   getCategories,
   getFeaturedArticle,
 } from "@/sanity/lib/articles";
 
-export const metadata: Metadata = site.metadata.insights;
+export const metadata: Metadata = createSeoMetadata(site.metadata.insights);
 
 export default async function InsightsPage() {
   const [articles, categories, featuredArticle] = await Promise.all([

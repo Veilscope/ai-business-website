@@ -16,8 +16,16 @@ export function SiteShell({ children }: { children: ReactNode }) {
 
   return (
     <>
+      <a
+        className="sr-only z-[100] rounded-md bg-white px-4 py-3 text-sm font-semibold text-slate-950 focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-blue-600"
+        href="#main-content"
+      >
+        Skip to main content
+      </a>
       <Navbar />
-      <main className="flex-1">{children}</main>
+      <main className="flex-1" id="main-content">
+        {children}
+      </main>
       <Footer />
     </>
   );

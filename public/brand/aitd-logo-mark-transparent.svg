@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-labelledby="title desc">
+  <title id="title">AI Training Denver transparent icon</title>
+  <desc id="desc">A simple AI monogram with a mountain-like A and workflow-inspired I.</desc>
+  <path d="M61 180 L108 76 L155 180" fill="none" stroke="#0B1220" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M87 139 H133" fill="none" stroke="#38BDF8" stroke-width="16" stroke-linecap="round"/>
+  <path d="M187 78 V178" fill="none" stroke="#38BDF8" stroke-width="20" stroke-linecap="round"/>
+  <circle cx="187" cy="78" r="11" fill="#0B1220"/>
+  <circle cx="187" cy="178" r="11" fill="#0B1220"/>
+</svg>

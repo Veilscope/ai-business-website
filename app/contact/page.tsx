@@ -3,9 +3,11 @@ import type { Metadata } from "next";
 import { ContactForm } from "@/components/forms/ContactForm";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { site } from "@/config/site";
+import { brand } from "@/config/brand";
 import { contactPage } from "@/content/pages";
+import { createSeoMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = site.metadata.contact;
+export const metadata: Metadata = createSeoMetadata(site.metadata.contact);
 
 export default function ContactPage() {
   return (
@@ -27,9 +29,18 @@ export default function ContactPage() {
                   <p className="text-sm font-semibold text-slate-500">
                     {detail.label}
                   </p>
-                  <p className="mt-1 text-base font-medium text-slate-950">
-                    {detail.value}
-                  </p>
+                  {detail.value === brand.contact.email ? (
+                    <a
+                      className="mt-1 inline-block text-base font-medium text-blue-700 hover:text-blue-900"
+                      href={`mailto:${brand.contact.email}`}
+                    >
+                      {detail.value}
+                    </a>
+                  ) : (
+                    <p className="mt-1 text-base font-medium text-slate-950">
+                      {detail.value}
+                    </p>
+                  )}
                 </div>
               ))}
             </div>

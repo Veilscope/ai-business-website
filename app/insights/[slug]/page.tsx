@@ -7,6 +7,7 @@ import { ArticleBody } from "@/components/content/ArticleBody";
 import { ArticleCard } from "@/components/content/ArticleCard";
 import { CTASection } from "@/components/sections/CTASection";
 import { brand } from "@/config/brand";
+import { createSeoMetadata } from "@/lib/seo";
 import { getArticleBySlug, getArticleSlugs } from "@/sanity/lib/articles";
 import { urlForImage } from "@/sanity/lib/image";
 
@@ -29,21 +30,21 @@ export async function generateMetadata({
   const article = await getArticleBySlug(slug);
 
   if (!article) {
-    return {
+    return createSeoMetadata({
       title: "Article not found",
-    };
+      description: "This article could not be found.",
+      path: `/insights/${slug}`,
+      noIndex: true,
+    });
   }
 
-  return {
+  return createSeoMetadata({
     title: article.seoTitle || article.title,
     description: article.seoDescription || article.excerpt,
-    robots: article.noIndex ? { index: false, follow: false } : undefined,
-    openGraph: {
-      title: article.seoTitle || article.title,
-      description: article.seoDescription || article.excerpt,
-      type: "article",
-    },
-  };
+    path: `/insights/${slug}`,
+    noIndex: Boolean(article.noIndex),
+    type: "article",
+  });
 }
 
 export default async function ArticlePage({ params }: ArticlePageProps) {

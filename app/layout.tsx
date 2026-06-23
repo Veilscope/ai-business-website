@@ -2,7 +2,10 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 
 import { SiteShell } from "@/components/layout/SiteShell";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { brand } from "@/config/brand";
+import { createSeoMetadata } from "@/lib/seo";
+import { organizationJsonLd, websiteJsonLd } from "@/lib/structuredData";
 
 import "./globals.css";
 
@@ -17,18 +20,26 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  ...createSeoMetadata({
+    title: brand.seo.defaultTitle,
+    description: brand.seo.defaultDescription,
+    path: "/",
+  }),
   metadataBase: new URL(brand.seo.siteUrl),
   title: {
     default: brand.seo.defaultTitle,
     template: brand.seo.titleTemplate,
   },
-  description: brand.seo.defaultDescription,
   keywords: [...brand.seo.keywords],
-  openGraph: {
-    title: brand.seo.defaultTitle,
-    description: brand.seo.defaultDescription,
-    type: "website",
-    locale: "en_US",
+  manifest: "/manifest.webmanifest",
+  icons: {
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/brand/favicon.svg", type: "image/svg+xml" },
+      { url: "/brand/favicon-32.png", sizes: "32x32", type: "image/png" },
+      { url: "/brand/favicon-16.png", sizes: "16x16", type: "image/png" },
+    ],
+    apple: [{ url: "/brand/aitd-logo-mark-192.png" }],
   },
 };
 
@@ -44,6 +55,7 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col bg-white text-slate-950">
+        <JsonLd data={[organizationJsonLd(), websiteJsonLd()]} />
         <SiteShell>{children}</SiteShell>
       </body>
     </html>

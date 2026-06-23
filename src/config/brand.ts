@@ -12,7 +12,7 @@ export const brand = {
     textNumber: "",
   },
   socialLinks: {
-    linkedin: "https://www.linkedin.com/company/your-placeholder",
+    linkedin: "",
   },
   ctas: {
     primary: "Request a Free AI Strategy Call",

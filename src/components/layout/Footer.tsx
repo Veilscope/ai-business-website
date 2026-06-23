@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 import { brand } from "@/config/brand";
@@ -15,10 +16,13 @@ export function Footer() {
             className="inline-flex items-center gap-3 text-sm font-semibold"
             href="/"
           >
-            <span className="grid h-9 w-9 place-items-center rounded-md bg-white text-sm font-bold text-slate-950">
-              AI
-            </span>
-            <span>{brand.name}</span>
+            <Image
+              alt={brand.name}
+              className="h-10 w-auto"
+              height={50}
+              src="/brand/aitd-logo-horizontal-white.svg"
+              width={180}
+            />
           </Link>
           <p className="mt-5 max-w-sm text-sm leading-6 text-slate-300">
             {site.footerDescription}

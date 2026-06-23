@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 256" role="img" aria-labelledby="title desc">
+  <title id="title">AI Training Denver logo white</title>
+  <desc id="desc">White version of the AI Training Denver logo for dark backgrounds.</desc>
+  <g transform="translate(0 0)">
+    <rect x="8" y="8" width="240" height="240" rx="56" fill="#F8FAFC"/>
+    <path d="M61 180 L108 76 L155 180" fill="none" stroke="#0B1220" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M87 139 H133" fill="none" stroke="#38BDF8" stroke-width="16" stroke-linecap="round"/>
+    <path d="M187 78 V178" fill="none" stroke="#38BDF8" stroke-width="20" stroke-linecap="round"/>
+    <circle cx="187" cy="78" r="11" fill="#0B1220"/>
+    <circle cx="187" cy="178" r="11" fill="#0B1220"/>
+  </g>
+  <g font-family="Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif">
+    <text x="296" y="118" font-size="62" font-weight="800" letter-spacing="-1.8" fill="#F8FAFC">AI Training</text>
+    <text x="296" y="178" font-size="54" font-weight="700" letter-spacing="-1.3" fill="#38BDF8">Denver</text>
+  </g>
+</svg>

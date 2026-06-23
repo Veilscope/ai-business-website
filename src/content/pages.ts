@@ -204,14 +204,14 @@ export const contactPage = {
 export const legalPages = {
   privacy: {
     eyebrow: "Privacy",
-    headline: "Privacy Policy Placeholder",
+    headline: "Privacy Policy",
     copy:
-      "This placeholder page is provided so the site has a clear route for future legal content. Replace this text with a policy reviewed for your business, tools, analytics, forms, and data handling practices.",
+      "How contact form submissions and basic website operation data are handled.",
   },
   terms: {
     eyebrow: "Terms",
-    headline: "Terms Placeholder",
+    headline: "Terms",
     copy:
-      "This placeholder page is provided so the site has a clear route for future legal content. Replace this text with terms that match your services, payment process, delivery model, and client agreements.",
+      "Basic terms for using this website and submitting service inquiries.",
   },
 };

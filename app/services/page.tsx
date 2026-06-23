@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 
+import { JsonLd } from "@/components/seo/JsonLd";
 import { Button } from "@/components/ui/Button";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { SectionHeader } from "@/components/ui/SectionHeader";
@@ -9,12 +10,15 @@ import { site } from "@/config/site";
 import { faqs } from "@/content/faqs";
 import { servicesPage } from "@/content/pages";
 import { services } from "@/content/services";
+import { createSeoMetadata } from "@/lib/seo";
+import { serviceListJsonLd } from "@/lib/structuredData";
 
-export const metadata: Metadata = site.metadata.services;
+export const metadata: Metadata = createSeoMetadata(site.metadata.services);
 
 export default function ServicesPage() {
   return (
     <>
+      <JsonLd data={serviceListJsonLd()} />
       <PageHeader
         eyebrow={servicesPage.eyebrow}
         intro={servicesPage.intro}

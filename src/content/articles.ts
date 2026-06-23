@@ -21,7 +21,7 @@ export const articles: Article[] = [
     category: "Denver Business AI",
     date: "2026-02-10",
     readTime: "5 min read",
-    author: "Team Placeholder",
+    author: "AI Training Denver",
     body: [
       {
         heading: "Start with work, not tools",
@@ -54,7 +54,7 @@ export const articles: Article[] = [
     category: "AI Training",
     date: "2026-02-17",
     readTime: "6 min read",
-    author: "Team Placeholder",
+    author: "AI Training Denver",
     body: [
       {
         heading: "Begin with realistic expectations",
@@ -87,7 +87,7 @@ export const articles: Article[] = [
     category: "AI for Small Business",
     date: "2026-02-24",
     readTime: "4 min read",
-    author: "Team Placeholder",
+    author: "AI Training Denver",
     body: [
       {
         heading: "Look for repeatable work",
@@ -120,7 +120,7 @@ export const articles: Article[] = [
     category: "Workflow Automation",
     date: "2026-03-03",
     readTime: "5 min read",
-    author: "Team Placeholder",
+    author: "AI Training Denver",
     body: [
       {
         heading: "Training builds capability",
@@ -153,7 +153,7 @@ export const articles: Article[] = [
     category: "Sales & Marketing AI",
     date: "2026-03-10",
     readTime: "5 min read",
-    author: "Team Placeholder",
+    author: "AI Training Denver",
     body: [
       {
         heading: "Use AI before and after the conversation",
@@ -186,7 +186,7 @@ export const articles: Article[] = [
     category: "Responsible AI",
     date: "2026-03-17",
     readTime: "6 min read",
-    author: "Team Placeholder",
+    author: "AI Training Denver",
     body: [
       {
         heading: "Mistake one: starting with too many tools",

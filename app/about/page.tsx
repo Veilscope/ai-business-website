@@ -5,8 +5,9 @@ import { PageHeader } from "@/components/ui/PageHeader";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { site } from "@/config/site";
 import { aboutPage } from "@/content/pages";
+import { createSeoMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = site.metadata.about;
+export const metadata: Metadata = createSeoMetadata(site.metadata.about);
 
 export default function AboutPage() {
   return (

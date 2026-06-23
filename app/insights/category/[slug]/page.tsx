@@ -5,6 +5,7 @@ import { ArticleCard } from "@/components/content/ArticleCard";
 import { CTASection } from "@/components/sections/CTASection";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { brand } from "@/config/brand";
+import { createSeoMetadata } from "@/lib/seo";
 import {
   getArticlesByCategory,
   getCategories,
@@ -30,18 +31,22 @@ export async function generateMetadata({
   const category = await getCategoryBySlug(slug);
 
   if (!category) {
-    return {
+    return createSeoMetadata({
       title: "Category not found",
-    };
+      description: "This insight category could not be found.",
+      path: `/insights/category/${slug}`,
+      noIndex: true,
+    });
   }
 
-  return {
+  return createSeoMetadata({
     title: `${category.title} Articles`,
     description:
       category.seoDescription ||
       category.description ||
       `Articles about ${category.title} from ${brand.name}.`,
-  };
+    path: `/insights/category/${slug}`,
+  });
 }
 
 export default async function CategoryPage({ params }: CategoryPageProps) {
