@@ -21,6 +21,11 @@ type RateBucket = {
 
 type ReadinessLevel = "AI Beginner" | "AI User" | "AI Ready";
 type AreaLabel = "Starting Point" | "Developing" | "Strong";
+type OwnerInsights = {
+  strengths: string[];
+  opportunities: string[];
+  talkingPoints: string[];
+};
 
 const MAX_BODY_BYTES = 12_000;
 const IP_WINDOW_MS = 15 * 60 * 1_000;
@@ -43,6 +48,89 @@ const questionWeights: Record<QuizQuestionId, number> = {
   q6: 2,
   q7: 2,
   q8: 2,
+};
+
+const questionInsightCopy: Record<
+  QuizQuestionId,
+  {
+    topic: string;
+    strength: string;
+    developing: string;
+    starting: string;
+  }
+> = {
+  q1: {
+    topic: "current AI use",
+    strength:
+      "They already use AI across several tasks and may be ready to standardize those habits.",
+    developing:
+      "They are using AI for common tasks; training can help turn casual use into repeatable workplace practice.",
+    starting:
+      "They are still early in adoption; highlight practical examples that make AI feel useful and approachable.",
+  },
+  q2: {
+    topic: "task selection",
+    strength:
+      "They consider risk, sensitivity, judgment, and repeatability when deciding where AI fits.",
+    developing:
+      "They mostly keep AI to lower-risk work; highlight a simple task-selection framework.",
+    starting:
+      "They may be choosing AI tasks by trial and error; highlight how training helps teams decide when AI is appropriate.",
+  },
+  q3: {
+    topic: "prompt structure",
+    strength:
+      "They already give AI goals, context, constraints, examples, and output format direction.",
+    developing:
+      "They give some useful context; highlight how better prompt structure can improve quality quickly.",
+    starting:
+      "They may rely on short prompts; highlight foundational prompting patterns and reusable templates.",
+  },
+  q4: {
+    topic: "iteration",
+    strength:
+      "They refine AI output with better context, examples, and focused revisions.",
+    developing:
+      "They ask for specific revisions; highlight a more repeatable review-and-revision process.",
+    starting:
+      "They may restart or reword prompts when output misses; highlight how to diagnose and improve weak responses.",
+  },
+  q5: {
+    topic: "output review",
+    strength:
+      "They verify important AI output before relying on it, which is a strong readiness signal.",
+    developing:
+      "They edit and check key facts; highlight a clearer standard for review before workplace use.",
+    starting:
+      "They may use AI output after only a quick review; highlight risk reduction, fact-checking, and human approval habits.",
+  },
+  q6: {
+    topic: "privacy and data handling",
+    strength:
+      "They use approved tools, minimize data exposure, and pause when risk is uncertain.",
+    developing:
+      "They remove private details and follow known rules; highlight clearer data-handling standards.",
+    starting:
+      "They rely on general judgment around sensitive information; highlight privacy rules and safe-use boundaries.",
+  },
+  q7: {
+    topic: "workflow consistency",
+    strength:
+      "They have repeatable AI workflows with responsibilities, review steps, and shared expectations.",
+    developing:
+      "Some people use AI, but methods vary; highlight shared workflows and team standards.",
+    starting:
+      "AI use is mostly individual or experimental; highlight one safe repeatable workflow as a starting point.",
+  },
+  q8: {
+    topic: "measurement",
+    strength:
+      "They evaluate time, quality, errors, risk, consistency, and repeatability.",
+    developing:
+      "They compare time saved and quality on real examples; highlight better measurement before scaling.",
+    starting:
+      "They judge AI mostly by speed or output volume; highlight how training ties AI use to quality and reliability.",
+  },
 };
 
 const resultOrder: Record<ReadinessLevel, number> = {
@@ -300,6 +388,7 @@ function evaluateQuiz(answers: Record<QuizQuestionId, QuizOptionId>) {
       return {
         name: area.name,
         label,
+        rawTotal: total,
         feedback: area.feedback[label],
       };
     }),
@@ -350,12 +439,21 @@ function areaLabelForTotal(total: number): AreaLabel {
 
 function buildPublicResult(
   finalLevel: ReadinessLevel,
-  areas: Array<{ name: string; label: AreaLabel; feedback: string }>,
+  areas: Array<{
+    name: string;
+    label: AreaLabel;
+    rawTotal: number;
+    feedback: string;
+  }>,
 ) {
   return {
     overallLevel: finalLevel,
     overallSummary: resultSummaries[finalLevel],
-    areas,
+    areas: areas.map((area) => ({
+      name: area.name,
+      label: area.label,
+      feedback: area.feedback,
+    })),
     cta: {
       label: "Book a Call for a Local AI Training Quote",
       copy: "We provide practical local, in-person AI training for businesses, owners, managers, and employees.",
@@ -442,6 +540,8 @@ function buildTextEmail(
   attribution: ReturnType<typeof normalizeAttribution>,
   ip: string,
 ) {
+  const ownerInsights = buildOwnerInsights(evaluation);
+
   return [
     "New AI readiness quiz lead",
     "",
@@ -460,6 +560,15 @@ function buildTextEmail(
     `UTM campaign: ${attribution.utmCampaign}`,
     `Submission ID: ${attribution.submissionId}`,
     "Resend send status: Submitted to Resend API",
+    "",
+    "What to highlight to this potential client:",
+    ...ownerInsights.talkingPoints.map((point) => `- ${point}`),
+    "",
+    "What they are already doing well:",
+    ...ownerInsights.strengths.map((strength) => `- ${strength}`),
+    "",
+    "What they can improve:",
+    ...ownerInsights.opportunities.map((opportunity) => `- ${opportunity}`),
     "",
     "Readiness areas:",
     ...evaluation.areas.map((area) => `${area.name}: ${area.label}`),
@@ -480,6 +589,7 @@ function buildHtmlEmail(
   attribution: ReturnType<typeof normalizeAttribution>,
   ip: string,
 ) {
+  const ownerInsights = buildOwnerInsights(evaluation);
   const summaryRows = [
     ["Lead email", email],
     ["Completion timestamp", new Date().toISOString()],
@@ -503,6 +613,15 @@ function buildHtmlEmail(
     <table cellpadding="8" cellspacing="0" border="0">
       ${summaryRows.map(([label, value]) => tableRow(label, value)).join("")}
     </table>
+
+    <h3>What to highlight to this potential client</h3>
+    ${unorderedList(ownerInsights.talkingPoints)}
+
+    <h3>What they are already doing well</h3>
+    ${unorderedList(ownerInsights.strengths)}
+
+    <h3>What they can improve</h3>
+    ${unorderedList(ownerInsights.opportunities)}
 
     <h3>Readiness areas</h3>
     <table cellpadding="8" cellspacing="0" border="0">
@@ -543,12 +662,109 @@ function buildHtmlEmail(
   `;
 }
 
+function buildOwnerInsights(
+  evaluation: ReturnType<typeof evaluateQuiz>,
+): OwnerInsights {
+  const sortedAreas = [...evaluation.areas].sort(
+    (first, second) => second.rawTotal - first.rawTotal,
+  );
+  const topArea = sortedAreas[0];
+  const weakestAreas = sortedAreas
+    .filter((area) => area.label !== "Strong")
+    .slice(-2)
+    .reverse();
+  const highWeightedGaps = evaluation.answerDetails
+    .filter((detail) => detail.weight === 2 && detail.rawValue < 3)
+    .sort((first, second) => {
+      if (first.rawValue !== second.rawValue) return first.rawValue - second.rawValue;
+      return second.weightedContribution - first.weightedContribution;
+    });
+  const strongAnswers = evaluation.answerDetails
+    .filter((detail) => detail.rawValue === 3)
+    .sort((first, second) => second.weight - first.weight);
+  const improvementAnswers = evaluation.answerDetails
+    .filter((detail) => detail.rawValue < 3)
+    .sort((first, second) => {
+      if (second.weight !== first.weight) return second.weight - first.weight;
+      return first.rawValue - second.rawValue;
+    });
+
+  const strengths = uniqueList([
+    ...evaluation.areas
+      .filter((area) => area.label === "Strong")
+      .map(
+        (area) =>
+          `${area.name} is a strong area. ${area.feedback}`,
+      ),
+    ...strongAnswers
+      .slice(0, 3)
+      .map((detail) => questionInsightCopy[detail.questionId].strength),
+    topArea && topArea.label !== "Strong"
+      ? `${topArea.name} is their strongest relative area. Lead with that progress before introducing next steps.`
+      : "",
+  ]).slice(0, 5);
+
+  const opportunities = uniqueList([
+    evaluation.guardrailApplied !== "None"
+      ? `A readiness guardrail was applied: ${evaluation.guardrailApplied} Treat this as an important coaching angle, especially around review, privacy, workflow, or measurement.`
+      : "",
+    ...weakestAreas.map(
+      (area) =>
+        `${area.name} is marked ${area.label}. ${area.feedback}`,
+    ),
+    ...highWeightedGaps.map((detail) => insightForAnswer(detail)),
+    ...improvementAnswers.map((detail) => insightForAnswer(detail)),
+  ]).slice(0, 6);
+
+  const talkingPoints = uniqueList([
+    `Position the conversation around their ${evaluation.finalLevel} result: ${resultSummaries[evaluation.finalLevel]}`,
+    topArea
+      ? `Start by acknowledging ${topArea.name} as their strongest area, then connect training to the areas that would make their AI use safer and more consistent.`
+      : "",
+    highWeightedGaps.length > 0
+      ? `Prioritize the high-signal gaps first: ${highWeightedGaps
+          .slice(0, 3)
+          .map((detail) => questionInsightCopy[detail.questionId].topic)
+          .join(", ")}. These weighted questions matter most for workplace readiness.`
+      : "They scored well on the higher-weight readiness questions, so frame training around standardizing and scaling what is already working.",
+    "Offer a practical next step: pick one real workplace task, define the prompt, review rules, privacy boundaries, and success measures, then train the team on that workflow.",
+  ]);
+
+  return {
+    strengths,
+    opportunities,
+    talkingPoints,
+  };
+}
+
+function insightForAnswer(
+  detail: ReturnType<typeof evaluateQuiz>["answerDetails"][number],
+) {
+  const insight = questionInsightCopy[detail.questionId];
+  const priority = detail.weight === 2 ? "High-priority" : "Useful";
+  const copy = detail.rawValue === 1 ? insight.starting : insight.developing;
+
+  return `${priority} improvement area: ${copy}`;
+}
+
+function uniqueList(items: string[]) {
+  return [...new Set(items.filter(Boolean))];
+}
+
 function tableRow(label: string, value: string) {
   return `
     <tr>
       <td><strong>${escapeHtml(label)}</strong></td>
       <td>${escapeHtml(value)}</td>
     </tr>
+  `;
+}
+
+function unorderedList(items: string[]) {
+  return `
+    <ul>
+      ${items.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
+    </ul>
   `;
 }
 
