@@ -40,6 +40,21 @@ CONTACT_TO_EMAIL=brody@aitrainingdenver.com
 
 Use `CONTACT_SMTP_SECURE=true` for SMTP port `465`. `CONTACT_SMTP_FROM` is optional and defaults to `AI Training Denver <CONTACT_SMTP_USER>`. The API also accepts the existing shorter aliases in `.env.local`: `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `SMTP_SECURE`, `FROM_EMAIL`, `FROM_NAME`, and `SUPPORT_TO`.
 
+## Quiz Email Setup
+
+The `/quiz` readiness assessment sends the internal lead notification through Resend after the user submits an email address. Set these server-only environment variables in `.env.local` and in production:
+
+```bash
+RESEND_API_KEY=re_your_api_key
+QUIZ_FROM_EMAIL="AI Training Denver <quiz@mail.aitrainingdenver.com>"
+QUIZ_NOTIFICATION_EMAILS=owner@example.com,partner@example.com
+QUIZ_REPLY_TO_EMAIL=
+QUIZ_CTA_URL=/contact
+SITE_URL=https://aitrainingdenver.com
+```
+
+`QUIZ_NOTIFICATION_EMAILS` accepts multiple recipients separated by commas. `QUIZ_FROM_EMAIL` must use a Resend-verified sending domain or subdomain in production. If only `mail.aitrainingdenver.com` is verified in Resend, use an address ending in `@mail.aitrainingdenver.com`. By default, the quiz uses the lead's email as the reply-to address for the internal notification; set `QUIZ_REPLY_TO_EMAIL` only if you need to override that behavior.
+
 ## Content Editing
 
 Open `/studio` to create and edit:

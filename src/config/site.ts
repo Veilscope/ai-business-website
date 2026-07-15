@@ -6,6 +6,7 @@ export const site = {
     { label: "Services", href: "/services" },
     { label: "About", href: "/about" },
     { label: "Insights", href: "/insights" },
+    { label: "Quiz", href: "/quiz" },
     { label: "Contact", href: "/contact" },
   ],
   primaryCta: {
@@ -48,6 +49,12 @@ export const site = {
       description:
         "Talk through AI training options, team readiness, and practical workflows for your Denver metro business.",
       path: "/contact",
+    },
+    quiz: {
+      title: "Workplace AI Readiness Quiz",
+      description:
+        "Answer 8 practical questions and get a workplace AI readiness result across practical use, prompting, review, and workflow habits.",
+      path: "/quiz",
     },
   },
 } as const;
